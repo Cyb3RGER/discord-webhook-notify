@@ -27,13 +27,23 @@ async function getDefaultFooter() {
 	}
 }
 
+async function getDefaultColor() {
+	const context = github.context;
+	const payload = context.payload;
+	switch (github.context.eventName) {
+		case 'release':
+			return (payload.release.prerelease ? '#ff9900' : '#00ff00');
+		default:
+			return default_colors[severity];
+	}
+}
 
 async function getDefaultAvatarUrl() {
 	const context = github.context;
 	const payload = context.payload;
 	switch (github.context.eventName) {
 		case 'release':
-			return payload.author.avatarUrl;
+			return payload.release.author.avatarUrl;
 		default:
 			return default_avatarUrl;
 	}
@@ -44,7 +54,7 @@ async function getDefaultUsername() {
 	const payload = context.payload;
 	switch (github.context.eventName) {
 		case 'release':
-			return payload.author.name;
+			return payload.release.author.login;
 		default:
 			return default_username;
 	}
@@ -119,7 +129,7 @@ async function run() {
 		const msg = new webhook.MessageBuilder()
 			.setName(username || await getDefaultUsername())
 			.setAvatar(avatarUrl || await getDefaultAvatarUrl())
-			.setColor(color || default_colors[severity])
+			.setColor(color || await getDefaultColor())
 			.setDescription((description || await getDefaultDescription()) + "\n" + details)
 			.setFooter(footer || await getDefaultFooter())
 			.setText(text)
