@@ -28,6 +28,15 @@ async function getDefaultDescription() {
     core.debug(`Tag: ${payload.release.tag_name}`)
     core.debug(payload.release.prerelease ? ' (pre-release)' : '')
     core.debug(`Url: ${payload.release.url}`)
+    core.debug(`- **Event:** ${context.eventName}\n`
+        + `- **Repo:** ${payload.repository.full_name}\n`
+        + `- **Action:** ${payload.action}\n`
+        + `- **Name**: ${payload.release.name}\n`
+        + `- **Author:** ${payload.release.author.login}\n`
+        + `- **Tag:** ${payload.release.tag_name}`
+        + payload.release.prerelease ? ' (pre-release)' : ''
+        + '\n'
+    + `- **Url:** ${payload.release.url}`)
 
     switch(github.context.eventName) {
     case 'push':
@@ -81,8 +90,7 @@ async function run() {
 
         const hook = new webhook.Webhook(webhookUrl);
 
-        core.info(`${username} ${avatarUrl} ${color} ${description} ${details} ${footer} ${text}`)
-        core.debug(await getDefaultDescription())
+        core.info(`${username} ${avatarUrl} ${color} ${description} ${details} ${footer} ${text}`)     
 
         const msg = new webhook.MessageBuilder()
                         .setName(username || default_username)
