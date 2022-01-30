@@ -32,6 +32,9 @@ inputs:
   avatarUrl:
     description: URL to png of discord avatar to use. Default is the GitHub monochrome mark cat logo.
     required: false
+  url:
+    description: URL to embedded link.
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
