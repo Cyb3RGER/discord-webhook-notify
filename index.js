@@ -43,7 +43,7 @@ async function getDefaultAvatarUrl() {
 	const payload = context.payload;
 	switch (github.context.eventName) {
 		case 'release':
-			return payload.release.author.avatarUrl;
+			return payload.release.author.avatar_url;
 		default:
 			return default_avatarUrl;
 	}
