@@ -20,6 +20,15 @@ async function getDefaultDescription() {
     const context = github.context;
     const payload = context.payload;
 
+    core.debug(`eventName: ${context.eventName}`)
+    core.debug(`Repo: ${payload.repository.full_name}`)
+    core.debug(`Action: ${payload.action}`)
+    core.debug(`Name: ${payload.release.name}`)
+    core.debug(`Author: ${payload.release.author.login}`)
+    core.debug(`Tag: ${payload.release.tag_name}`)
+    core.debug(payload.release.prerelease ? ' (pre-release)' : '')
+    core.debug(`Url: ${payload.release.url}`)
+
     switch(github.context.eventName) {
     case 'push':
         return `- **Event:** ${context.eventName}\n`
