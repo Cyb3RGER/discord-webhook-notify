@@ -73,6 +73,7 @@ async function run() {
         const hook = new webhook.Webhook(webhookUrl);
 
         core.info(`${username} ${avatarUrl} ${color} ${description} ${details} ${footer} ${text}`)
+        core.debug(await getDefaultDescription())
 
         const msg = new webhook.MessageBuilder()
                         .setName(username || default_username)
