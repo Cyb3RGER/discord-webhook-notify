@@ -145,7 +145,7 @@ async function run() {
 			.setFooter(footer || await getDefaultFooter())
 			.setText(text)
 			.setTime()
-			.setUrl(url || await getDefaultUrl());
+			.setURL(url || await getDefaultUrl());
 
 		hook.send(msg);
 
