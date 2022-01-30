@@ -20,24 +20,6 @@ async function getDefaultDescription() {
     const context = github.context;
     const payload = context.payload;
 
-    core.debug(`eventName: ${context.eventName}`)
-    core.debug(`Repo: ${payload.repository.full_name}`)
-    core.debug(`Action: ${payload.action}`)
-    core.debug(`Name: ${payload.release.name}`)
-    core.debug(`Author: ${payload.release.author.login}`)
-    core.debug(`Tag: ${payload.release.tag_name}`)
-    core.debug(payload.release.prerelease ? ' (pre-release)' : '')
-    core.debug(`Url: ${payload.release.url}`)
-    core.debug(`- **Event:** ${context.eventName}\n`
-        + `- **Repo:** ${payload.repository.full_name}\n`
-        + `- **Action:** ${payload.action}\n`
-        + `- **Name**: ${payload.release.name}\n`
-        + `- **Author:** ${payload.release.author.login}\n`
-        + `- **Tag:** ${payload.release.tag_name}`
-        + payload.release.prerelease ? ' (pre-release)' : ''
-        + '\n'
-    + `- **Url:** ${payload.release.url}`)
-
     switch(github.context.eventName) {
     case 'push':
         return `- **Event:** ${context.eventName}\n`
@@ -57,7 +39,7 @@ async function getDefaultDescription() {
             + `- **Name**: ${payload.release.name}\n`
             + `- **Author:** ${payload.release.author.login}\n`
             + `- **Tag:** ${payload.release.tag_name}`
-            + payload.release.prerelease ? ' (pre-release)' : ''
+            + (payload.release.prerelease ? ' (pre-release)' : '')
             + '\n'
             + `- **Url:** ${payload.release.url}`
             ;
@@ -90,7 +72,7 @@ async function run() {
 
         const hook = new webhook.Webhook(webhookUrl);
 
-        core.info(`${username} ${avatarUrl} ${color} ${description} ${details} ${footer} ${text}`)     
+        core.info(`${username} ${avatarUrl} ${color} ${description} ${details} ${footer} ${text}`)
 
         const msg = new webhook.MessageBuilder()
                         .setName(username || default_username)
