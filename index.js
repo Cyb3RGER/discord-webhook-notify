@@ -90,8 +90,8 @@ async function getDefaultDescription() {
 				;
 		case 'release':
 			if (payload.action == "published")
-				return `A new ${(payload.release.prerelease ? 'pre-release' : 'release')} of ${payload.repository.name} has been published: **${payload.release.name}**\n`
-					+ `${payload.release.body}\n`
+				return `A new ${(payload.release.prerelease ? 'pre-release' : 'release')} of ${payload.repository.name} has been published: **${payload.release.name}**\n\n`
+					+ `${payload.release.body}\n\n`
 					+ `**It can be found here:** ${payload.release.html_url}`
 					;
 			else
