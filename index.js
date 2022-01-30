@@ -16,6 +16,41 @@ const long_severity = {
 	error: "Error"
 }
 
+async function getDefaultFooter() {
+	const context = github.context;
+	const payload = context.payload;
+	switch (github.context.eventName) {
+		case 'release':
+			return '';
+		default:
+			return ("Severity: " + long_severity[severity]);
+	}
+}
+
+
+async function getDefaultAvatarUrl() {
+	const context = github.context;
+	const payload = context.payload;
+	switch (github.context.eventName) {
+		case 'release':
+			return payload.author.avatarUrl;
+		default:
+			return default_avatarUrl;
+	}
+}
+
+async function getDefaultUsername() {
+	const context = github.context;
+	const payload = context.payload;
+	switch (github.context.eventName) {
+		case 'release':
+			return payload.author.name;
+		default:
+			return default_username;
+	}
+}
+
+
 async function getDefaultDescription() {
 	const context = github.context;
 	const payload = context.payload;
@@ -34,10 +69,9 @@ async function getDefaultDescription() {
 				;
 		case 'release':
 			if (payload.action == "published")
-				return `**A new ${(payload.release.prerelease ? 'pre-release' : 'release')} of ${payload.repository.name} has been published**\n`
-					+ `- **${payload.release.name}**\n`
+				return `A new ${(payload.release.prerelease ? 'pre-release' : 'release')} of ${payload.repository.name} has been published: **${payload.release.name}**\n`					
 					+ `- **Repo:** ${payload.repository.full_name}\n`
-					+ `- **Tag:** ${payload.release.tag_name}`
+					+ `- **Tag:** ${payload.release.tag_name}\n`
 					+ `- **Url:** ${payload.release.html_url}`
 					;
 			else
@@ -83,11 +117,11 @@ async function run() {
 		core.info(`${username} ${avatarUrl} ${color} ${description} ${details} ${footer} ${text}`)
 
 		const msg = new webhook.MessageBuilder()
-			.setName(username || default_username)
-			.setAvatar(avatarUrl || default_avatarUrl)
+			.setName(username || await getDefaultUsername())
+			.setAvatar(avatarUrl || await getDefaultAvatarUrl())
 			.setColor(color || default_colors[severity])
 			.setDescription((description || await getDefaultDescription()) + "\n" + details)
-			.setFooter(footer || ("Severity: " + long_severity[severity]))
+			.setFooter(footer || await getDefaultFooter())
 			.setText(text)
 			.setTime();
 
