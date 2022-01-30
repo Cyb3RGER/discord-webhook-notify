@@ -49,6 +49,17 @@ async function getDefaultAvatarUrl() {
 	}
 }
 
+async function getDefaultUrl() {
+	const context = github.context;
+	const payload = context.payload;
+	switch (github.context.eventName) {
+		case 'release':
+			return payload.release.html_url;
+		default:
+			return '';
+	}
+}
+
 async function getDefaultUsername() {
 	const context = github.context;
 	const payload = context.payload;
@@ -117,6 +128,7 @@ async function run() {
 		const username = core.getInput('username');
 		const color = core.getInput('color');
 		const avatarUrl = core.getInput('avatarUrl');
+		const url = core.getInput('url');
 
 		const context = github.context;
 		const obstr = JSON.stringify(context, undefined, 2)
@@ -133,7 +145,8 @@ async function run() {
 			.setDescription((description || await getDefaultDescription()) + "\n" + details)
 			.setFooter(footer || await getDefaultFooter())
 			.setText(text)
-			.setTime();
+			.setTime()
+			.setUrl(url || await getDefaultUrl());
 
 		hook.send(msg);
 
